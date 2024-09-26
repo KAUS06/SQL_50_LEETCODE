@@ -1,0 +1,68 @@
+#LEETCODE
+#SQL 50
+#9:197. Rising Temperature
+
+Table: Weather
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| recordDate    | date    |
+| temperature   | int     |
++---------------+---------+
+id is the column with unique values for this table.
+There are no different rows with the same recordDate.
+This table contains information about the temperature on a certain day.
+ 
+
+Write a solution to find all dates' id with higher temperatures compared to its previous dates (yesterday).
+
+Return the result table in any order.
+
+The result format is in the following example.
+
+ 
+
+Example 1:
+
+Input: 
+Weather table:
++----+------------+-------------+
+| id | recordDate | temperature |
++----+------------+-------------+
+| 1  | 2015-01-01 | 10          |
+| 2  | 2015-01-02 | 25          |
+| 3  | 2015-01-03 | 20          |
+| 4  | 2015-01-04 | 30          |
++----+------------+-------------+
+Output: 
++----+
+| id |
++----+
+| 2  |
+| 4  |
++----+
+Explanation: 
+In 2015-01-02, the temperature was higher than the previous day (10 -> 25).
+In 2015-01-04, the temperature was higher than the previous day (20 -> 30).
+
+Solution:
+# Write your MySQL query statement below
+SELECT w1.id
+FROM Weather w1, Weather w2
+WHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature > w2.temperature;
+
+Explanation:
+SELECT w1.id:
+
+This part specifies that we want to retrieve the id from the Weather table for the records that meet the conditions defined in the WHERE clause.
+FROM Weather w1, Weather w2:
+
+This indicates that we are performing a self-join on the Weather table. Here, w1 and w2 are two different aliases for the same Weather table. This allows us to compare records within the same table.
+WHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1:
+
+The DATEDIFF function calculates the difference in days between w1.recordDate and w2.recordDate. The condition = 1 ensures that we are only looking at pairs of records where w1.recordDate is exactly one day later than w2.recordDate. In other words, we are comparing the temperature of a day with its previous day.
+AND w1.temperature > w2.temperature:
+
+This condition checks if the temperature on w1.recordDate (the later date) is greater than the temperature on w2.recordDate (the earlier date). We only want to include records where today's temperature is higher than yesterday's temperature.
